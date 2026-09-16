@@ -209,9 +209,24 @@ Toàn bộ 8 biểu đồ so sánh đã được kết xuất tại thư mục `
 - **Resident Set Size (RAM RSS)**:
   - Mức chiếm dụng bộ nhớ cơ bản của tiến trình Python trên cả Sender và Receiver dao động ổn định trong khoảng **102 – 110 MB** qua tất cả các thuật toán và kích thước gói tin.
   - Không có hiện tượng rò rỉ bộ nhớ (memory leak) qua 372 lượt chạy liên tục.
-- **Memory Allocation Delta**:
-  - Playfair tạo ra mức tăng bộ nhớ tạm thời rõ rệt nhất (**103.7 – 157.7 KB**) do quá trình phân rã chuỗi thành digraph và khởi tạo danh sách cặp ký tự trong bộ nhớ heap.
-  - AES-128-CBC và Caesar gần như không tạo ra biến động bộ nhớ bổ sung (Delta xấp xỉ 0 KB) nhờ cơ chế buffer trực tiếp và quản lý bộ nhớ ở tầng C.
+### 5.9. Biểu đồ 9: Đánh giá so sánh Độ an toàn Mật mã học (Security Comparison)
+Bố cục lưới 2×2 phân tích 4 chỉ số an toàn mật mã học cốt lõi:
+1. **Không gian khóa hiệu dụng ($H(K)$)**:
+   - **Caesar**: $4.64\text{ bits}$ ($25\text{ khóa}$) $\rightarrow$ Dễ dàng bị vét cạn trong vài micro-giây.
+   - **Playfair**: $79.08\text{ bits}$ ($24! \approx 6.20 \times 10^{23}\text{ khóa}$) $\rightarrow$ Vượt trội hơn Caesar $10^{22}$ lần, loại bỏ hoàn toàn khả năng dò quét thủ công.
+   - **AES-128-CBC**: $128.0\text{ bits}$ ($2^{128} \approx 3.40 \times 10^{38}\text{ khóa}$) $\rightarrow$ Vượt xa ngưỡng an toàn tối thiểu của NIST ($112\text{ bits}$), bảo mật cấp quân sự.
+2. **Chỉ số trùng phùng (Index of Coincidence - $IC$)**:
+   - Tiếng Anh tự nhiên & **Caesar**: $IC = \mathbf{0.0667}$ (kém, lộ 100% tần suất chữ cái).
+   - **Playfair**: $IC = \mathbf{0.0482}$ (khá tốt, kéo lệch tần suất chữ đơn tiệm cận mức ngẫu nhiên).
+   - **AES-128-CBC**: $IC = \mathbf{0.0385}$ (lý tưởng, tương đương phân phối ngẫu nhiên đều $1/26$).
+3. **Độ hỗn loạn thông tin (Shannon Entropy - $H$)**:
+   - **Caesar**: $4.15\text{ bits/char}$ (giữ nguyên đặc trưng ngôn ngữ tự nhiên).
+   - **Playfair**: $4.60\text{ bits/char}$ (tiệm cận cực đại $\log_2(25) = 4.64$ trên bảng 25 chữ cái).
+   - **AES-128-CBC**: $7.99\text{ bits/byte}$ (gần mức cực đại $8.0\text{ bits/byte}$ của hệ byte nhị phân).
+4. **Khoảng cách duy nhất (Unicity Distance - $U_D$)**:
+   - **Caesar**: $\sim 2\text{ ký tự}$ (chỉ cần chặn 1 từ là bẻ gãy khóa).
+   - **Playfair**: $\sim 35\text{ ký tự}$ (cần bắt trọn một đoạn văn bản).
+   - **AES-128-CBC**: Bất khả thi trong thực tế ($> 10^{30}\text{ ký tự}$).
 
 ---
 

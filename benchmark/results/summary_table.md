@@ -50,3 +50,12 @@
 | AES-128-CBC | 1 KB | 0.0% | 0.0% | 104.4 MB | 104.4 MB | 0.0 KB | 0.0 KB |
 | AES-128-CBC | 100 KB | 0.0% | 0.0% | 102.4 MB | 102.4 MB | 0.0 KB | 0.0 KB |
 | AES-128-CBC | 1 MB | 3.3% | 3.3% | 110.4 MB | 110.9 MB | 0.0 KB | 0.0 KB |
+
+## 4. Danh gia So sanh Do an toan Mat ma hoc (Theoretical Security Comparison)
+
+| Chi so an toan | Y nghia do luong | Caesar | Playfair | AES-128-CBC |
+|---|---|:---:|:---:|:---:|
+| **Khong gian khoa (H(K))** | Do kho khi do quet vet can | 4.6 bits (25 khoa) | **79.1 bits ($6.2 \times 10^{23}$)** | **128.0 bits ($3.4 \times 10^{38}$)** |
+| **Chi so trung phung (IC)** | Kha nang chong phan tich lap | 0.0667 (Kem) | **~0.0482 (Kha tot)** | **0.0385 (Ly tuong)** |
+| **Entropy thong tin (H)** | Do hon loan / ngau nhien | 4.15 bits/char | **~4.60 bits/char** | **7.99 bits/byte** |
+| **Khoang cach duy nhat (U_D)** | Luong ban ma can de be khoa | ~2 ky tu | **~25 - 50 ky tu** | **Khong kha thi** |

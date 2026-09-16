@@ -133,13 +133,13 @@ def run_full_pipeline(
 
     print(f"\n[+] Thoi gian thuc hien toan bo 372 luot benchmark: {total_duration:.2f} giay.")
 
-    # 2. Phân tích dữ liệu thống kê và vẽ 8 biểu đồ khoa học
+    # 2. Phân tích dữ liệu thống kê và vẽ 9 biểu đồ khoa học
     print("\n[*] Dang phan tich du lieu bang pandas va tao bieu do matplotlib ...")
     # Đọc và xác thực cấu trúc file CSV
     df = analyze.load_and_validate(csv_file)
     # Tính toán các chỉ số thống kê (Mean, Median, Std, Min, Max)
     df_rates, df_stats = analyze.compute_statistics(df)
-    # Xuất 8 biểu đồ chuẩn IEEE / Scientific (300 DPI)
+    # Xuất 9 biểu đồ chuẩn IEEE / Scientific (300 DPI)
     analyze.generate_charts(df_stats, charts_dir)
     # Xuất bảng tổng kết báo cáo định dạng Markdown
     analyze.export_markdown_summary(df_rates, df_stats, summary_md)
@@ -148,7 +148,7 @@ def run_full_pipeline(
     print("  HOAN TAT TOAN BO TIEN TRINH BENCHMARK!")
     print(f"  - File CSV:      {csv_file}")
     print(f"  - Bang ket qua:  {summary_md}")
-    print(f"  - 8 Bieu do:     {charts_dir}")
+    print(f"  - 9 Bieu do:     {charts_dir}")
     print("============================================================")
 
 
