@@ -26,33 +26,34 @@ import common
 import server
 
 
-def perform_ping_test(host: str, count: int = 10) -> bool:
+def perform_ping_test(host: str, count: int = 4) -> bool:
     """
     Kiểm tra độ trễ mạng và tỷ lệ mất gói (packet loss) bằng lệnh ping của hệ điều hành.
     Tự động nhận diện hệ điều hành: Windows dùng cờ '-n', Linux/macOS dùng cờ '-c'.
     """
     import platform
-    print(f"[*] Dang thuc hien Ping test toi {host} ({count} goi tin) ...")
+    print(f"[*] Dang thuc hien Ping test toi {host} ({count} goi tin) ...", flush=True)
     try:
-        # Nhận diện Windows (-n) hay Linux (-c) để đặt tham số ping chính xác
         flag = "-n" if platform.system().lower() == "windows" else "-c"
         cmd = ["ping", flag, str(count), host]
-        # Chạy lệnh ping và bắt giữ toàn bộ kết quả đầu ra stdout
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=count * 2)
-        print(res.stdout)
-        out = res.stdout.lower()
-        # Đánh giá tỷ lệ mất gói tin
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        lines = []
+        for line in proc.stdout:
+            print(line, end="", flush=True)
+            lines.append(line)
+        proc.wait(timeout=count * 3)
+        out = "".join(lines).lower()
         if "0% loss" in out or "0% packet loss" in out or "0.0% packet loss" in out:
-            print("[+] Ping test hoan hao: 0% mat goi.")
+            print("[+] Ping test hoan hao: 0% mat goi.\n", flush=True)
             return True
         elif "100% loss" in out or "100% packet loss" in out or "unreachable" in out:
-            print("[!] CANH BAO: Khong ping duoc toi host. Vui long kiem tra firewall hoac cau hinh mang!")
+            print("[!] CANH BAO: Khong ping duoc toi host. Vui long kiem tra firewall hoac cau hinh mang!\n", flush=True)
             return False
         else:
-            print("[!] CANH BAO: Co hien tuong mat goi. Kiem tra lai adapter mang Bridge/Host-Only.")
+            print("[!] CANH BAO: Co hien tuong mat goi. Kiem tra lai adapter mang Bridge/Host-Only.\n", flush=True)
             return True
     except Exception as exc:
-        print(f"[!] Khong the thuc hien ping: {exc}")
+        print(f"[!] Khong the thuc hien ping: {exc}\n", flush=True)
         return True
 
 
@@ -63,6 +64,7 @@ def run_full_pipeline(
     seed: int = 42,
     is_local: bool | None = None,
     clean: bool = False,
+    no_ping: bool = False,
 ) -> None:
     """
     Hàm điều phối toàn diện quy trình đo kiểm và sinh báo cáo:
@@ -116,7 +118,8 @@ def run_full_pipeline(
     else:
         print(f"[*] Che do REMOTE: Ket noi toi Receiver tai {clean_host}:{port} (khong bat server noi bo) ...")
         # Chạy kiểm tra Ping trước khi bắt đầu đo đạc qua mạng thật
-        perform_ping_test(clean_host, count=10)
+        if not no_ping:
+            perform_ping_test(clean_host, count=4)
 
     # 1. Khởi chạy tiến trình Benchmark Client
     t_start = time.perf_counter()
@@ -170,6 +173,11 @@ if __name__ == "__main__":
         action="store_true",
         help="Xoa toan bo ket qua cu (CSV, MD va anh bieu do) truoc khi chay lan moi",
     )
+    parser.add_argument(
+        "--no-ping",
+        action="store_true",
+        help="Bo qua buoc ping kiem tra mang truoc khi do",
+    )
     parser.add_argument("--gui", action="store_true", help="Mo giao dien do hoa Benchmark GUI")
     args = parser.parse_args()
 
@@ -190,4 +198,5 @@ if __name__ == "__main__":
         seed=args.seed,
         is_local=is_local_flag,
         clean=args.clean,
+        no_ping=args.no_ping,
     )
