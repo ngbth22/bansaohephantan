@@ -562,6 +562,7 @@ class BenchmarkWindow(QMainWindow):
             "06_throughput.png - 6. Băng thông truyền tải hệ thống (Throughput)",
             "07_cpu_usage.png - 7. Mức độ sử dụng CPU % (Sender vs Receiver)",
             "08_ram_usage.png - 8. Tiêu thụ Bộ nhớ RAM (Process RSS & Delta)",
+            "09_security_comparison.png - 9. Đánh giá So sánh Độ an toàn Mật mã học (Security Comparison)",
         ])
         self.combo_charts.currentIndexChanged.connect(self._on_combo_chart_changed)
         ctrl_bar.addWidget(self.combo_charts)
@@ -588,7 +589,7 @@ class BenchmarkWindow(QMainWindow):
 
         self.lbl_chart_img = QLabel()
         self.lbl_chart_img.setAlignment(Qt.AlignCenter)
-        self.lbl_chart_img.setText("Chưa có biểu đồ. Hãy chạy Benchmark hoặc bấm 'Phân tích lại CSV & Sinh 8 Biểu đồ'.")
+        self.lbl_chart_img.setText("Chưa có biểu đồ. Hãy chạy Benchmark hoặc bấm 'Phân tích lại CSV & Sinh 9 Biểu đồ'.")
         self.lbl_chart_img.setFont(QFont("Arial", 11))
         self.lbl_chart_img.setStyleSheet("color: #94a3b8;")
         self.scroll_chart.setWidget(self.lbl_chart_img)
@@ -1001,7 +1002,7 @@ class BenchmarkWindow(QMainWindow):
                 self._load_charts_into_viewer()
                 self._load_stats_table()
                 self.tabs.setCurrentIndex(1)  # Chuyen sang tab bieu do
-                QMessageBox.information(self, "Hoàn tất", "Đã phân tích số liệu và tạo thành công 8 biểu đồ phân tích!")
+                QMessageBox.information(self, "Hoàn tất", "Đã phân tích số liệu và tạo thành công 9 biểu đồ phân tích!")
             else:
                 QMessageBox.critical(self, "Lỗi phân tích", msg)
 
@@ -1030,7 +1031,7 @@ class BenchmarkWindow(QMainWindow):
             "  • Dữ liệu đo thô: benchmark_results.csv\n"
             "  • Bảng thống kê chi tiết: detailed_statistics.csv\n"
             "  • Báo cáo tổng hợp: summary_table.md\n"
-            "  • Toàn bộ 8 ảnh biểu đồ phân tích trong thư mục charts/\n\n"
+            "  • Toàn bộ 9 ảnh biểu đồ phân tích trong thư mục charts/\n\n"
             "Bảng dữ liệu và giao diện sẽ được làm mới hoàn toàn.",
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No,
@@ -1054,7 +1055,7 @@ class BenchmarkWindow(QMainWindow):
         self.lbl_chart_img.clear()
         self.lbl_chart_img.setText(
             "Chưa có biểu đồ. Dữ liệu và ảnh cũ đã được xóa sạch.\n"
-            "Hãy nhấn 'BẮT ĐẦU BENCHMARK' để chạy lần đo mới hoặc bấm 'Phân tích lại CSV & Sinh 8 Biểu đồ'."
+            "Hãy nhấn 'BẮT ĐẦU BENCHMARK' để chạy lần đo mới hoặc bấm 'Phân tích lại CSV & Sinh 9 Biểu đồ'."
         )
 
         # 3. Reset Tab 3: Bảng thống kê
@@ -1075,7 +1076,7 @@ class BenchmarkWindow(QMainWindow):
             )
         else:
             self.append_log(
-                f"🗑️ [DỌN DẸP] Đã xóa thành công toàn bộ {len(deleted_files)} tệp kết quả cũ (dữ liệu CSV, bảng thống kê và 8 ảnh biểu đồ)."
+                f"🗑️ [DỌN DẸP] Đã xóa thành công toàn bộ {len(deleted_files)} tệp kết quả cũ (dữ liệu CSV, bảng thống kê và 9 ảnh biểu đồ)."
             )
             self.append_log("[i] Hệ thống và giao diện đã được đặt lại trạng thái ban đầu, sẵn sàng cho lần chạy mới.")
             QMessageBox.information(
@@ -1096,6 +1097,7 @@ class BenchmarkWindow(QMainWindow):
             os.path.join(self.charts_dir, "06_throughput.png"),
             os.path.join(self.charts_dir, "07_cpu_usage.png"),
             os.path.join(self.charts_dir, "08_ram_usage.png"),
+            os.path.join(self.charts_dir, "09_security_comparison.png"),
         ]
         self._show_chart(self.combo_charts.currentIndex())
 
